@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import "bootstrap/dist/css/bootstrap.min.css"
 import axios from 'axios'
+import './App.css'
 
 function App() {
     const [fullName, setFullName] = useState('');
@@ -26,7 +27,14 @@ function App() {
         setEmail('');
         setPassword('');
     }
-
+    const userNameExists = async () => {
+        const users = await axios.get('http://localhost:4000/app/users')
+        const sameClients = users.data.filter(user => user.username === userName);
+        if (sameClients.length > 0){
+            return true
+        }
+        return false
+    }
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -37,15 +45,16 @@ function App() {
             email: email,
             password: password
         }
+        if (userNameExists()){
+            console.log('Provided user exists')
+            return
+        }
         axios.post('http://localhost:4000/app/signup', registered)
-            .then(res => console.log(res.data))
-        
         resetForm()
-        
     }
 
     return (
-        <div>
+        <div id='box'>
             <div className="container">
                 <div className="form-div">
                     <form onSubmit={onSubmit}>
@@ -54,7 +63,7 @@ function App() {
                             placeholder='Full Name' 
                             onChange={changeFullName}
                             value={fullName}
-                            className='form-control form-group'
+                            className='form-control form-group f'
                         />
 
                         <input 
@@ -62,23 +71,23 @@ function App() {
                             placeholder='User Name' 
                             onChange={changeUserName}
                             value={userName}
-                            className='form-control form-group'
+                            className='form-control form-group f'
                         />
                         <input 
                             type="text"
                             placeholder='E-mail' 
                             onChange={changeEmail}
                             value={email}
-                            className='form-control form-group'
+                            className='form-control form-group f'
                         />
                         <input 
                             type="password"
                             placeholder='Password' 
                             onChange={changePassword}
                             value={password}
-                            className='form-control form-group'
+                            className='form-control form-group f'
                         />
-                        <input type='submit' className='btn btn-danger btn-block' value='Submit'></input>
+                        <input type='submit' className='btn btn-danger btn-block f' value='Submit'></input>
 
                     </form>
                 </div>

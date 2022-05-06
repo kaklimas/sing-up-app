@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const signUpTemplateCopy = require('../models/SignUpModels.js')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { default: mongoose, Schema } = require('mongoose');
+const { json } = require('express');
 
 router.post('/signup', async (req, res) => {
     
@@ -20,5 +22,10 @@ router.post('/signup', async (req, res) => {
         })
         .catch(error => res.json(error))
 })
+router.get('/users', async (req, res) => {
+    const all = await signUpTemplateCopy.find({});
+    res.json(all);
+})
+
 
 module.exports = router
